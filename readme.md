@@ -11,7 +11,7 @@ mkdir -p "/usr/local/include/quickjs"
 install -m644 quickjs.h quickjs-libc.h "/usr/local/include/quickjs"
 
 在链接命令中给出所依赖的库时，需要注意库之间的依赖顺序，依赖其他库的库一定要放到被依赖库的前面
-
+cmake中链接库的顺序是a依赖b，那么b放在a的后面。
 
 动态库的添加：
 
