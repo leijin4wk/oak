@@ -20,4 +20,7 @@ set_target_properties(quickjs
         "/usr/local/lib/quickjs/libquickjs.a")
 
 target_link_libraries(oak
-        quickjs  -lm -ldl -lpthread)
+        quickjs)
+
+target_link_libraries(oak
+      -lm -ldl -lpthread)
