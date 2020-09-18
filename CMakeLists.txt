@@ -27,5 +27,5 @@ set_target_properties(quickjs
         PROPERTIES IMPORTED_LOCATION
         "/usr/local/lib/quickjs/libquickjs.a")
 
-target_link_libraries(oak quickjs
+target_link_libraries(oak service quickjs
       -lm -ldl -lpthread)
