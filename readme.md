@@ -21,5 +21,5 @@ target_link_libraries(project_name -lmxnet ) #添加libmxnet.so
 静态库的添加：
 
 add_library(mxnet STATIC IMPORTED)
-set_property(TARGET mxnet PROPERTY IMPORTED_LOCATION /path/to/libmxnet.a)
+set_target_property(TARGET mxnet PROPERTY IMPORTED_LOCATION /path/to/libmxnet.a)
 target_link_libraries(project_name mxnet ) #添加libmxnet.a
