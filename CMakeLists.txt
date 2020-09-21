@@ -4,10 +4,16 @@ project(oak C)
 
 MESSAGE(STATUS "Current Operation System Name:${CMAKE_SYSTEM_NAME} ${CMAKE_SYSTEM_PROCESSOR}")
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 99)
 
 ##显示编译细节信息
 set(CMAKE_VERBOSE_MAKEFILE ON)
+
+##复制配置文件到运行目录
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h
+        COPYONLY)
 
 include_directories(/usr/local/include)
 
@@ -17,7 +23,7 @@ aux_source_directory(src/ DIR_SRCS)
 add_subdirectory(service)
 
 ##生成可执行代码
-add_executable(oak ${DIR_SRCS})
+add_executable(oak ${DIR_SRCS} src/logger.h)
 
 ##下面是添加库
 add_library(quickjs STATIC IMPORTED)
