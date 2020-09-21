@@ -24,14 +24,13 @@ static JSValue js_test_add(JSContext *ctx, JSValueConst this_val,
                            int argc, JSValueConst *argv) {
     int a;
     double b;
-
     if (JS_ToInt32(ctx, &a, argv[0]))
         return JS_EXCEPTION;
     if (JS_ToFloat64(ctx, &b, argv[1]))
         return JS_EXCEPTION;
-    if (JS_IsFunction(ctx, argv[2])) {
-        JS_Call(ctx, argv[2], argv[2], 1, &argv[1]);
-    }
+    if (!JS_IsFunction(ctx, argv[2]))
+        return JS_EXCEPTION;
+    JS_Call(ctx, argv[2], argv[2], 1, &argv[1]);
     return JS_NewFloat64(ctx, test_add(a, b));
 }
 

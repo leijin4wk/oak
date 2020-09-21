@@ -26,13 +26,11 @@ static JSContext *JS_NewCustomContext(JSRuntime *rt)
 
 int main(int argc, char **argv)
 {
-    JSRuntime *rt;
-    JSContext *ctx;
-    rt = JS_NewRuntime();
+    JSRuntime *rt=JS_NewRuntime();
     js_std_set_worker_new_context_func(JS_NewCustomContext);
     js_std_init_handlers(rt);
     JS_SetModuleLoaderFunc(rt, NULL, js_module_loader, NULL);
-    ctx = JS_NewCustomContext(rt);
+    JSContext *ctx = JS_NewCustomContext(rt);
     //添加自定义模块
     js_init_module_test(ctx, "libtest.so");
     js_std_add_helpers(ctx, argc, argv);
