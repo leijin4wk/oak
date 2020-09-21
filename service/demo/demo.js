@@ -1,11 +1,9 @@
-import { testAdd , testAddStr} from 'libtest.so'
+import { testAdd } from 'libtest.so'
 
-console.log('\n')
-console.log(`testAdd: ${testAdd(1, 0.5)}`)
-console.log('\n')
-console.log(`testAddStr: ${testAddStr('Pi equal to about ', 3.14159)}`)
-console.log('\n')
-
+let r=testAdd(1, 0.5,function (v){
+    console.log("aaaa:",v)
+})
+console.log("r="+r)
 let a=2;
 let b=3;
 console.log("a+b="+(a+b));
