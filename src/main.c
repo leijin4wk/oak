@@ -3,6 +3,8 @@ extern uint32_t qjsc_demo_size ;
 
 extern const uint8_t qjsc_demo[];
 
+extern JSModuleDef *js_init_module_test(JSContext *ctx, const char *name);
+
 static JSContext *JS_NewCustomContext(JSRuntime *rt)
 {
     JSContext *ctx = JS_NewContextRaw(rt);
@@ -31,6 +33,8 @@ int main(int argc, char **argv)
     js_std_init_handlers(rt);
     JS_SetModuleLoaderFunc(rt, NULL, js_module_loader, NULL);
     ctx = JS_NewCustomContext(rt);
+    //添加自定义模块
+    js_init_module_test(ctx, "libtest.so");
     js_std_add_helpers(ctx, argc, argv);
     js_std_eval_binary(ctx, qjsc_demo, qjsc_demo_size, 0);
     js_std_loop(ctx);
