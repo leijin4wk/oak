@@ -9,10 +9,10 @@
 #define countof(x) (sizeof(x) / sizeof((x)[0]))
 
 /* 自定义原生C函数 */
-static double test_add(int a, double b)
-{
+static double test_add(int a, double b) {
     return a + b;
 }
+
 /*
     定义 QuickJS C 函数
     *ctx     : 运行时上下文
@@ -21,8 +21,7 @@ static double test_add(int a, double b)
     *argv    : 入参列表
 */
 static JSValue js_test_add(JSContext *ctx, JSValueConst this_val,
-                           int argc, JSValueConst *argv)
-{
+                           int argc, JSValueConst *argv) {
     int a;
     double b;
 
@@ -30,14 +29,9 @@ static JSValue js_test_add(JSContext *ctx, JSValueConst this_val,
         return JS_EXCEPTION;
     if (JS_ToFloat64(ctx, &b, argv[1]))
         return JS_EXCEPTION;
-
-    JSValueConst func=argv[2];
-    int e=JS_IsFunction(ctx,func);
-    JS_Call(ctx,func,func,1,&argv[1]);
-    printf("argc = %d \n", argc);
-    printf("a = %d \n", a);
-    printf("b = %lf \n", b);
-    printf("argv[1].u.float64 = %lf \n", argv[1].u.float64);
+    if (JS_IsFunction(ctx, argv[2])) {
+        JS_Call(ctx, argv[2], argv[2], 1, &argv[1]);
+    }
     return JS_NewFloat64(ctx, test_add(a, b));
 }
 
@@ -49,15 +43,13 @@ static const JSCFunctionListEntry js_test_funcs[] = {
 };
 
 /* 定义初始化回调方法（由系统调用，入参格式固定），将函数入口列表 在模块中暴露 */
-static int js_test_init(JSContext *ctx, JSModuleDef *m)
-{
+static int js_test_init(JSContext *ctx, JSModuleDef *m) {
     return JS_SetModuleExportList(ctx, m, js_test_funcs,
                                   countof(js_test_funcs));
 }
 
 /* 定义初始化模块方法，由系统自动调用，且函数名称不可更改 */
-JSModuleDef *JS_INIT_MODULE(JSContext *ctx, const char *module_name)
-{
+JSModuleDef *JS_INIT_MODULE(JSContext *ctx, const char *module_name) {
     JSModuleDef *m;
     m = JS_NewCModule(ctx, module_name, js_test_init);
     if (!m)
