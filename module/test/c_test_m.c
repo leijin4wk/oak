@@ -8,11 +8,6 @@
 #define JS_INIT_MODULE js_init_module_test
 #define countof(x) (sizeof(x) / sizeof((x)[0]))
 
-/* 自定义原生C函数 */
-static double test_add(int a, double b) {
-    return a + b;
-}
-
 /*
     定义 QuickJS C 函数
     *ctx     : 运行时上下文
@@ -22,25 +17,19 @@ static double test_add(int a, double b) {
 */
 static JSValue js_test_add(JSContext *ctx, JSValueConst this_val,
                            int argc, JSValueConst *argv) {
-    int a;
-    double b;
-    if (JS_ToInt32(ctx, &a, argv[0]))
-        return JS_EXCEPTION;
-    if (JS_ToFloat64(ctx, &b, argv[1]))
-        return JS_EXCEPTION;
-    if (!JS_IsFunction(ctx, argv[2]))
+    if (!JS_IsFunction(ctx, argv[0]))
         return JS_EXCEPTION;
     char* t=JS_GetContextOpaque(ctx);
-    printf("%s\n",t);
-    JS_Call(ctx, argv[2], argv[2], 1, &argv[1]);
-    return JS_NewFloat64(ctx, test_add(a, b));
+    JSValue param=JS_NewString(ctx,t);
+    JS_Call(ctx, argv[0], argv[0], 1, &param);
+    return JS_NewInt32(ctx, 0);
 }
 
 
 /* 定义API的函数入口名称及列表 */
 static const JSCFunctionListEntry js_test_funcs[] = {
         /* JS_CFUNC_DEF(函数入口名称，入参个数，QuickJS C 函数) */
-        JS_CFUNC_DEF("testAdd", 2, js_test_add),
+        JS_CFUNC_DEF("testAdd", 1, js_test_add),
 };
 
 /* 定义初始化回调方法（由系统调用，入参格式固定），将函数入口列表 在模块中暴露 */
