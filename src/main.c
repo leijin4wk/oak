@@ -1,4 +1,5 @@
 #include <quickjs/quickjs-libc.h>
+#include <quickjs/quickjs.h>
 extern uint32_t qjsc_demo_size ;
 
 extern const uint8_t qjsc_demo[];
@@ -31,6 +32,10 @@ int main(int argc, char **argv)
     js_std_init_handlers(rt);
     JS_SetModuleLoaderFunc(rt, NULL, js_module_loader, NULL);
     JSContext *ctx = JS_NewCustomContext(rt);
+
+    char* aa="aaa";
+    JS_SetContextOpaque(ctx,aa);
+
     //添加自定义模块
     js_init_module_test(ctx, "libtest.so");
     js_std_add_helpers(ctx, argc, argv);
