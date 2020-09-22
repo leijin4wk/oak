@@ -24,7 +24,6 @@ static JSValue js_test_add(JSContext *ctx, JSValueConst this_val,
                            int argc, JSValueConst *argv) {
     int a;
     double b;
-    double c;
     if (JS_ToInt32(ctx, &a, argv[0]))
         return JS_EXCEPTION;
     if (JS_ToFloat64(ctx, &b, argv[1]))
