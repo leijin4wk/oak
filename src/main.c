@@ -31,11 +31,11 @@ int main(int argc, char **argv)
     js_std_set_worker_new_context_func(JS_NewCustomContext);
     js_std_init_handlers(rt);
     JS_SetModuleLoaderFunc(rt, NULL, js_module_loader, NULL);
+    char* runtimeParam="this is a runtime param!";
+    JS_SetRuntimeOpaque(rt,runtimeParam);
     JSContext *ctx = JS_NewCustomContext(rt);
-
-    char* aa="this is a param!";
-    JS_SetContextOpaque(ctx,aa);
-
+    char* contextParam="this is a context param!";
+    JS_SetContextOpaque(ctx,contextParam);
     //添加自定义模块
     js_init_module_test(ctx, "libtest.so");
     js_std_add_helpers(ctx, argc, argv);

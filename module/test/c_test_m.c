@@ -19,9 +19,13 @@ static JSValue js_test_add(JSContext *ctx, JSValueConst this_val,
                            int argc, JSValueConst *argv) {
     if (!JS_IsFunction(ctx, argv[0]))
         return JS_EXCEPTION;
-    char* t=JS_GetContextOpaque(ctx);
-    JSValue param=JS_NewString(ctx,t);
-    JS_Call(ctx, argv[0], argv[0], 1, &param);
+    JSValue param[2];
+    char* context=JS_GetContextOpaque(ctx);
+    param[0]=JS_NewString(ctx,context);
+    JSRuntime * runtime= JS_GetRuntime(ctx);
+    char* runTime=JS_GetRuntimeOpaque(runtime);
+    param[1]=JS_NewString(ctx,runTime);
+    JS_Call(ctx, argv[0], argv[0], 2, param);
     return JS_NewInt32(ctx, 0);
 }
 
