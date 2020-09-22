@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     JS_SetModuleLoaderFunc(rt, NULL, js_module_loader, NULL);
     JSContext *ctx = JS_NewCustomContext(rt);
 
-    char* aa="aaa";
+    char* aa="this is a param!";
     JS_SetContextOpaque(ctx,aa);
 
     //添加自定义模块
