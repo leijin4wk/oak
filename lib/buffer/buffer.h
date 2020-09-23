@@ -96,6 +96,9 @@ buffer_trim(buffer_t *self);
 void
 buffer_print(buffer_t *self);
 
+
+buffer_t *
+read_file_to_buffer(const char* file_name);
 #define buffer_string(self) (self->data)
 
 #endif

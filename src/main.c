@@ -1,5 +1,4 @@
 #include <quickjs/quickjs-libc.h>
-#include <quickjs/quickjs.h>
 extern uint32_t qjsc_demo_size ;
 
 extern const uint8_t qjsc_demo[];

@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "buffer.h"
 
 // TODO: shared with reference counting
@@ -350,4 +352,21 @@ buffer_print(buffer_t *self) {
   }
 
   printf("\n");
+}
+
+buffer_t *
+read_file_to_buffer(const char* file_name){
+    char buff[1024];
+    int fd= open(file_name, O_RDONLY);
+    if(fd<0){
+        printf("%s 文件打开失败！",file_name);
+        return NULL;
+    }
+    buffer_t* file_buffer=buffer_new_with_size(8*1024);
+    int res=0;
+    while((res=read(fd,buff,1024))!=0) {
+        buffer_append_n(file_buffer,buff,res);
+    }
+    close(fd);
+    return file_buffer;
 }

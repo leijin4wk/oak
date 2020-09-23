@@ -27,3 +27,12 @@ target_link_libraries(project_name -lmxnet ) #添加libmxnet.so
 add_library(mxnet STATIC IMPORTED)
 set_target_property(TARGET mxnet PROPERTY IMPORTED_LOCATION /path/to/libmxnet.a)
 target_link_libraries(project_name mxnet ) #添加libmxnet.a
+
+
+https://github.com/nodejs/http-parser.git  添加http解析库  -lhttp_parser
+
+https://github.com/bellard/quickjs  添加quickjs js执行引擎  quickjs
+
+
+
+
