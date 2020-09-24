@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "net.h"
 #include "config.h"
 int init_server_socket(void){
@@ -44,7 +45,28 @@ int set_nonblock(int fd) {
     return 0;
 }
 int read_socket_to_buffer(int fd,buffer_t *buffer){
-
+    char buff[4096];
+    int len;
+    while ((len = recv(fd, buff, sizeof(buff), 0)) >= 0) {
+        if (len > 0) {
+            buffer_append_n(buffer,buff,len);
+        }
+        if (len == 0) {
+            printf("read len = 0\n");
+            break;
+        }
+    }
+    if (len < 0) {
+        if (len == -1) {
+            if (errno != EAGAIN) {
+                perror ("read");
+                close(fd);
+            }
+            return 0;
+        }
+        return -1;
+    }
+    return 0;
 }
 int write_buffer_to_socket(int fd,buffer_t *buffer){
 

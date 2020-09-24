@@ -340,17 +340,8 @@ buffer_clear(buffer_t *self) {
 
 void
 buffer_print(buffer_t *self) {
-  int i;
-  size_t len = self->len;
-
   printf("\n ");
-
-  // hex
-  for (i = 0; i < len; ++i) {
-    printf(" %02x", self->alloc[i]);
-    if ((i + 1) % 8 == 0) printf("\n ");
-  }
-
+  printf("%s",self->data);
   printf("\n");
 }
 

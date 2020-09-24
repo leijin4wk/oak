@@ -1,1 +1,1 @@
-int config_port=80;
+int config_port=8888;

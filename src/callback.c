@@ -46,7 +46,6 @@ void ev_accept_callback(struct m_event *watcher) {
 void ev_read_callback(void *watcher) {
     http_client *client = (http_client *) watcher;
     buffer_t *read_buff = buffer_new_with_size(1024);
-
     int res = read_socket_to_buffer(client->event_fd, read_buff);
     if (res < 0) {
         return;
@@ -54,6 +53,7 @@ void ev_read_callback(void *watcher) {
     //创建并初始化response
     client-> response = new_http_response();
     client->request = parser_http_request_buffer(read_buff);
+    buffer_print(read_buff);
     //这个是关键方法
     //TODO 处理请求
 
