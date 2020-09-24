@@ -1,5 +1,6 @@
 #include <quickjs/quickjs-libc.h>
 #include "net.h"
+#include "event.h"
 extern uint32_t qjsc_demo_size ;
 
 extern const uint8_t qjsc_demo[];
@@ -33,6 +34,10 @@ int main(int argc, char **argv)
         printf("server socket init fail!");
         exit(-1);
     }
+    ev_loop_init();
+    ev_accept_start(server_fd);
+    ev_loop_start(1);
+
     JSRuntime *rt=JS_NewRuntime();
     js_std_set_worker_new_context_func(JS_NewCustomContext);
     js_std_init_handlers(rt);
