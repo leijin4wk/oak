@@ -40,3 +40,9 @@ int set_nonblock(int fd) {
     if (fcntl(fd, F_SETFL, flags) < 0) return -1;
     return 0;
 }
+int read_socket_to_buffer(int fd,buffer_t *buffer){
+
+}
+int write_buffer_to_socket(int fd,buffer_t *buffer){
+
+}

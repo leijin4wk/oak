@@ -4,8 +4,9 @@
 
 #ifndef OAK_HTTP_H
 #define OAK_HTTP_H
-#include <buffer.h>
-
+#include <stdlib.h>
+#include <stdio.h>
+#include "buffer.h"
 #define alloc_cpy(dest, src, len) \
     dest = malloc(len + 1);\
     memcpy(dest, src, len);\
@@ -46,14 +47,32 @@ typedef struct{
     char *body;
 } http_response;
 
-http_request* parser_http_request_buffer(buffer_t *buf);
+
+typedef struct{
+    int e_pool_fd;
+    int event_fd;
+    char *client_ip;
+    http_request *request;
+    http_response *response;
+} http_client;
+
 http_request *new_http_request();
-//void delete_http_request(struct http_request *request);
+
+http_response *new_http_response();
+
+http_request *parser_http_request_buffer(buffer_t *buf);
 
 buffer_t *create_http_response_buffer(http_response *http_response);
-http_response *new_http_response();
-//void delete_http_response(http_response * response);
 
+//void delete_http_request(struct http_request *request);
+//void delete_http_response(http_response * response);
 void get_error_status_body(http_response *http_response,int code);
 struct http_header *add_http_response_header(http_response *response);
+
+http_client* new_http_client();
+
+void free_http_client(http_client* client);
+
+int int_to_str(int i,char **out);
+
 #endif //M_BACK_HTTP_BUFFER_H

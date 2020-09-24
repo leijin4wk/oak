@@ -104,21 +104,20 @@ http_request *new_http_request() {
 //    request = NULL;
 //}
 //
-////初始化一个response相应
-//struct http_response *new_http_response() {
-//    struct http_response *response = malloc(sizeof(struct http_response));
-//    response->http_major = 1;
-//    response->http_minor = 1;
-//    response->code = 200;
-//    response->headers = NULL;
-//    response->body = NULL;
-//    response->real_file_path = NULL;
-//    response->data_type = -1;
-//    struct http_header *header = add_http_response_header(response);
-//    header->name = strdup("Server");
-//    header->value = strdup("LeiJin/m_back");
-//    return response;
-//}
+//初始化一个response相应
+http_response *new_http_response() {
+    http_response *response = malloc(sizeof(http_response));
+    response->http_major = 1;
+    response->http_minor = 1;
+    response->code = 200;
+    response->headers = NULL;
+    response->body = NULL;
+    response->data_type = -1;
+    struct http_header *header = add_http_response_header(response);
+    header->name = strdup("Server");
+    header->value = strdup("LeiJin/m_back");
+    return response;
+}
 //
 ////删除一个response
 //void delete_http_response(struct http_response *response) {
@@ -300,59 +299,20 @@ http_request *parser_http_request_buffer(buffer_t *buf) {
     http_parser_execute(parser, &parser_set, buf->data, buf->len);
     return parser->data;
 }
-//
-buffer_t *create_http_response_buffer(http_response *http_response) {
-    buffer_t *buffer = buffer_new();
-    buffer_append_n(buffer, "HTTP/", 5);
-//    char *str_major;
-//    int res = 0;
-//    res = int_to_str(http_response->http_major, &str_major);
-//    buffer_add(buffer, str_major, res);
-//    free(str_major);
-//    buffer_add(buffer, ".", 1);
-//    char *str_minor;
-//    res = int_to_str(http_response->http_minor, &str_minor);
-//    buffer_add(buffer, str_minor, res);
-//    free(str_minor);
-//    buffer_add(buffer, " ", 1);
-//    char *str_code;
-//    res = int_to_str(http_response->code, &str_code);
-//    buffer_add(buffer, str_code, res);
-//    free(str_code);
-//    buffer_add(buffer, " ", 1);
-//    enum http_status status;
-//    status = (enum http_status) http_response->code;
-//    const char *str_status = http_status_str(status);
-//    buffer_add(buffer, str_status, strlen(str_status));
-//    buffer_add(buffer, "\r\n", 2);
-//    struct http_header *header = http_response->headers;
-//    while (header != NULL) {
-//        buffer_add(buffer, header->name, strlen(header->name));
-//        buffer_add(buffer, ": ", 2);
-//        buffer_add(buffer, header->value, strlen(header->value));
-//        buffer_add(buffer, "\r\n", 2);
-//        header = header->next;
-//    }
-//    buffer_add(buffer, "\r\n", 2);
-//    if (http_response->body != NULL) {
-//        buffer_add(buffer, http_response->body, strlen(http_response->body));
-//    }
-    return buffer;
+
+struct http_header *add_http_response_header(http_response *response) {
+    struct http_header *header = response->headers;
+    while (header != NULL) {
+        if (header->next == NULL) {
+            header->next = new_http_header();
+            return header->next;
+        }
+        header = header->next;
+    }
+    response->headers = new_http_header();
+    return response->headers;
 }
-//
-//struct http_header *add_http_response_header(struct http_response *response) {
-//    struct http_header *header = response->headers;
-//    while (header != NULL) {
-//        if (header->next == NULL) {
-//            header->next = new_http_header();
-//            return header->next;
-//        }
-//        header = header->next;
-//    }
-//    response->headers = new_http_header();
-//    return response->headers;
-//}
-//
+
 
 //void get_error_status_body(struct http_response *http_response, int code) {
 //    struct Buffer *buffer = new_buffer(1024, 1024);
@@ -370,3 +330,65 @@ buffer_t *create_http_response_buffer(http_response *http_response) {
 //    http_response->body = buffer_to_string(buffer);
 //    free_buffer(buffer);
 //}
+
+http_client *new_http_client() {
+    http_client *client = malloc(sizeof(http_client));
+    if (client == NULL) {
+        printf("new http client fail!");
+        return NULL;
+    }
+    client->client_ip = NULL;
+    client->request = NULL;
+    client->response = NULL;
+    return client;
+}
+buffer_t *create_http_response_buffer(http_response *http_response) {
+    buffer_t *buffer = buffer_new();
+    buffer_append_n(buffer, "HTTP/", 5);
+    char *str_major;
+    int res = 0;
+    res = int_to_str(http_response->http_major, &str_major);
+    buffer_append_n(buffer, str_major, res);
+    free(str_major);
+    buffer_append_n(buffer, ".", 1);
+    char *str_minor;
+    res = int_to_str(http_response->http_minor, &str_minor);
+    buffer_append_n(buffer, str_minor, res);
+    free(str_minor);
+    buffer_append_n(buffer, " ", 1);
+    char *str_code;
+    res = int_to_str(http_response->code, &str_code);
+    buffer_append_n(buffer, str_code, res);
+    free(str_code);
+    buffer_append_n(buffer, " ", 1);
+    enum http_status status;
+    status = (enum http_status) http_response->code;
+    const char *str_status = http_status_str(status);
+    buffer_append_n(buffer, str_status, strlen(str_status));
+    buffer_append_n(buffer, "\r\n", 2);
+    struct http_header *header = http_response->headers;
+    while (header != NULL) {
+        buffer_append_n(buffer, header->name, strlen(header->name));
+        buffer_append_n(buffer, ": ", 2);
+        buffer_append_n(buffer, header->value, strlen(header->value));
+        buffer_append_n(buffer, "\r\n", 2);
+        header = header->next;
+    }
+    buffer_append_n(buffer, "\r\n", 2);
+    if (http_response->body != NULL) {
+        buffer_append_n(buffer, http_response->body, strlen(http_response->body));
+    }
+    return buffer;
+}
+int int_to_str(int i,char **out){
+    int j=1;
+    int tmp=i;
+    while((tmp=tmp/10)>=1){
+        j++;
+    }
+    char* res=malloc(j+1);
+    sprintf(res,"%d",i);
+    res[j]='\0';
+    *out=res;
+    return j;
+}
