@@ -2,7 +2,6 @@
 // Created by leijin on 2020/9/21.
 //
 #include <quickjs/quickjs.h>
-#include "stdio.h"
 #include "string.h"
 
 #define JS_INIT_MODULE js_init_module_test

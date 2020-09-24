@@ -36,7 +36,7 @@ add_subdirectory(service)
 
 
 ##生成可执行代码
-add_executable(oak ${DIR_SRCS})
+add_executable(oak ${DIR_SRCS} module/http_context/http_context.c)
 
 ##下面是添加库
 add_library(quickjs STATIC IMPORTED)
