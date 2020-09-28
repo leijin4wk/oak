@@ -9,6 +9,9 @@ extern JSModuleDef *js_init_module_test(JSContext *ctx, const char *name);
 
 extern JSModuleDef *js_init_module_point(JSContext *ctx, const char *name);
 
+extern JSModuleDef *js_init_module_http_route(JSContext *ctx, const char *module_name);
+
+extern JSModuleDef *js_init_module_http_context(JSContext *ctx, const char *module_name);
 static JSContext *JS_NewCustomContext(JSRuntime *rt)
 {
     JSContext *ctx = JS_NewContextRaw(rt);
@@ -52,6 +55,9 @@ int main(int argc, char **argv)
     //添加自定义模块
     js_init_module_test(ctx, "libtest.so");
     js_init_module_point(ctx, "libpoint.so");
+    js_init_module_http_route(ctx, "libhttp-route.so");
+    js_init_module_http_context(ctx, "libhttp-context.so");
+
     js_std_add_helpers(ctx, argc, argv);
     js_std_eval_binary(ctx, qjsc_demo, qjsc_demo_size, 0);
     js_std_loop(ctx);

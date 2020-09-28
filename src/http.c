@@ -6,8 +6,6 @@
 #include "http.h"
 #include "map.h"
 
-extern map_void_t dispatcher_map;
-
 static struct http_header *new_http_header();
 //
 //static void delete_http_header(struct http_header *header);

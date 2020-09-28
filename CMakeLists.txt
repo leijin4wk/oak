@@ -31,11 +31,13 @@ add_subdirectory(module/point)
 
 add_subdirectory(module/http_context)
 
+add_subdirectory(module/http_route)
+
 ##添加js web服务
 add_subdirectory(service)
 
 ##生成可执行代码
-add_executable(oak ${DIR_SRCS} module/http_context/http_context.c)
+add_executable(oak ${DIR_SRCS})
 
 ##下面是添加库
 add_library(quickjs STATIC IMPORTED)
@@ -44,5 +46,5 @@ set_target_properties(quickjs
         PROPERTIES IMPORTED_LOCATION
         "/usr/local/lib/quickjs/libquickjs.a")
 
-target_link_libraries(oak service test point  quickjs
+target_link_libraries(oak service test point http-route http-context quickjs
       -lm -ldl -lpthread -lhttp_parser)
