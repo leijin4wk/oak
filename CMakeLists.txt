@@ -27,6 +27,8 @@ include_directories(include)
 
 add_subdirectory(module/test)
 
+add_subdirectory(module/point)
+
 add_subdirectory(module/http_context)
 
 ##添加js web服务
@@ -42,5 +44,5 @@ set_target_properties(quickjs
         PROPERTIES IMPORTED_LOCATION
         "/usr/local/lib/quickjs/libquickjs.a")
 
-target_link_libraries(oak test service quickjs
+target_link_libraries(oak service test point  quickjs
       -lm -ldl -lpthread -lhttp_parser)

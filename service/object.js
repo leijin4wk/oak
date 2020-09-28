@@ -1,4 +1,4 @@
-export default class Point {
+export default class JSPoint {
     constructor(x, y) {
        this.x=x;
        this.y=y;

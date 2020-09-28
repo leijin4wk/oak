@@ -7,6 +7,8 @@ extern const uint8_t qjsc_demo[];
 
 extern JSModuleDef *js_init_module_test(JSContext *ctx, const char *name);
 
+extern JSModuleDef *js_init_module_point(JSContext *ctx, const char *name);
+
 static JSContext *JS_NewCustomContext(JSRuntime *rt)
 {
     JSContext *ctx = JS_NewContextRaw(rt);
@@ -28,15 +30,15 @@ static JSContext *JS_NewCustomContext(JSRuntime *rt)
 
 int main(int argc, char **argv)
 {
-
-    int server_fd= init_server_socket();
-    if(server_fd<0){
-        printf("server socket init fail!");
-        exit(-1);
-    }
-    ev_loop_init();
-    ev_accept_start(server_fd);
-    ev_loop_start(1);
+//
+//    int server_fd= init_server_socket();
+//    if(server_fd<0){
+//        printf("server socket init fail!");
+//        exit(-1);
+//    }
+//    ev_loop_init();
+//    ev_accept_start(server_fd);
+//    ev_loop_start(1);
 
     JSRuntime *rt=JS_NewRuntime();
     js_std_set_worker_new_context_func(JS_NewCustomContext);
@@ -49,6 +51,7 @@ int main(int argc, char **argv)
     JS_SetContextOpaque(ctx,contextParam);
     //添加自定义模块
     js_init_module_test(ctx, "libtest.so");
+    js_init_module_point(ctx, "libpoint.so");
     js_std_add_helpers(ctx, argc, argv);
     js_std_eval_binary(ctx, qjsc_demo, qjsc_demo_size, 0);
     js_std_loop(ctx);
