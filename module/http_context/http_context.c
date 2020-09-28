@@ -50,6 +50,7 @@ static const JSCFunctionListEntry js_http_context_proto_funcs[] = {
         JS_CFUNC_DEF("service", 0, js_point_norm),
 };
 
+
 static int js_http_context_init(JSContext *ctx, JSModuleDef *m)
 {
     JSValue js_proto, js_class;
