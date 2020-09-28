@@ -71,7 +71,6 @@ void ev_read_callback(void *watcher) {
 }
 
 void ev_write_callback(void *watcher) {
-    int res = 0;
     http_client *client = (http_client *) watcher;
     struct http_header *header = add_http_response_header(client->response);
     header->name = strdup("Content-Length");
@@ -79,7 +78,7 @@ void ev_write_callback(void *watcher) {
     int_to_str(strlen(client->response->body), &length);
     header->value = length;
     buffer_t *read_buff = create_http_response_buffer(client->response);
-    res = write_buffer_to_socket(client->event_fd, read_buff);
+    int res = write_buffer_to_socket(client->event_fd, read_buff);
     if (res < 0) {
         printf("ssl_write_buffer fail!");
         return;
