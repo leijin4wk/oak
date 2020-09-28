@@ -20,20 +20,17 @@ include_directories(/usr/local/include)
 # 查找目录下的所有源文件，并将名称保存到 DIR_SRCS 变量
 aux_source_directory(src/ DIR_SRCS)
 
-##添加lib
-include_directories(lib/map)
-add_subdirectory(lib/map)
-
-include_directories(lib/buffer)
-add_subdirectory(lib/buffer)
+##添加include
+include_directories(include)
 
 ##添加quickjs 扩展模块
+
 add_subdirectory(module/test)
 
+add_subdirectory(module/http_context)
 
 ##添加js web服务
 add_subdirectory(service)
-
 
 ##生成可执行代码
 add_executable(oak ${DIR_SRCS} module/http_context/http_context.c)
@@ -41,10 +38,9 @@ add_executable(oak ${DIR_SRCS} module/http_context/http_context.c)
 ##下面是添加库
 add_library(quickjs STATIC IMPORTED)
 
-
 set_target_properties(quickjs
         PROPERTIES IMPORTED_LOCATION
         "/usr/local/lib/quickjs/libquickjs.a")
 
-target_link_libraries(oak test service quickjs map buffer
+target_link_libraries(oak test service quickjs
       -lm -ldl -lpthread -lhttp_parser)
