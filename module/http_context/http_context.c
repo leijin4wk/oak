@@ -2,6 +2,7 @@
 // Created by leijin on 2020/9/24.
 //
 #include <quickjs/quickjs.h>
+#include <http.h>
 
 #define countof(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -35,10 +36,20 @@ static JSValue js_http_context_constructor(JSContext *ctx,
     return JS_EXCEPTION;
 }
 
-static JSValue js_point_norm(JSContext *ctx, JSValueConst this_val,
+static JSValue js_http_context_service(JSContext *ctx, JSValueConst this_val,
                              int argc, JSValueConst *argv)
 {
-    return JS_NewFloat64(ctx, 220.0);
+    printf("default_service called!\n");
+    return JS_NewBool(ctx, 1);
+}
+
+static JSValue js_http_context_get_head(JSContext *ctx, JSValueConst this_val,
+                                       int argc, JSValueConst *argv)
+{
+//    http_response* request=JS_GetContextOpaque(ctx);
+
+    printf("default_service called!\n");
+    return JS_NewBool(ctx, 1);
 }
 
 static JSClassDef js_http_context_class = {
@@ -47,7 +58,9 @@ static JSClassDef js_http_context_class = {
 };
 
 static const JSCFunctionListEntry js_http_context_proto_funcs[] = {
-        JS_CFUNC_DEF("service", 0, js_point_norm),
+        JS_CFUNC_DEF("service", 0, js_http_context_service),
+        JS_CFUNC_DEF("getHeadValue", 1, js_http_context_get_head),
+
 };
 
 
@@ -55,7 +68,7 @@ static int js_http_context_init(JSContext *ctx, JSModuleDef *m)
 {
     JSValue js_proto, js_class;
 
-    /* create the Point class */
+    /* create class */
     JS_NewClassID(&js_http_context_class_id);
     JS_NewClass(JS_GetRuntime(ctx), js_http_context_class_id, &js_http_context_class);
 

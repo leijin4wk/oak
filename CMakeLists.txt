@@ -37,7 +37,7 @@ add_subdirectory(module/http_route)
 add_subdirectory(service)
 
 ##生成可执行代码
-add_executable(oak ${DIR_SRCS})
+add_executable(oak ${DIR_SRCS} src/runtime.h src/runtime.c)
 
 ##下面是添加库
 add_library(quickjs STATIC IMPORTED)
